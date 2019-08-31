@@ -13,7 +13,7 @@ def find1(item1, tofind):
     print(item1[i].name, tofind)
     if(item1[i].name == tofind):
       return item1[i]
-  return nil
+  return None
 
 def filename(index):
   if(index < 10):
