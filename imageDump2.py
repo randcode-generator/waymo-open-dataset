@@ -196,23 +196,6 @@ for data in dataset:
     tmp1 = find1(frame.projected_lidar_labels, image.name).labels
     if(len(tmp1) == 0):
       continue
-  
-    # image = Image.open(path).convert('RGB')
-    # draw = ImageDraw.Draw(image)
-    # for index1 in range(len(tmp1)):
-    #   tmp = tmp1[index1].box
-
-    #   center_x = tmp.center_x
-    #   center_y = tmp.center_y
-    #   width = tmp.width
-    #   length = tmp.length
-
-    #   left = center_x - (length/2)
-    #   top = center_y - (width/2)
-    #   right = center_x + (length/2)
-    #   bottom = center_y + (width/2)
-    #   draw.line([(left, top), (left, bottom), (right, bottom), (right, top), (left, top)], width=4, fill='red')
-    # image.save(path, format='JPEG')
 
     #here
     import matplotlib.pyplot as plt
@@ -232,7 +215,7 @@ for data in dataset:
 
     image = Image.open(path).convert('RGB')
     draw = ImageDraw.Draw(image)
-    offset = 2
+    offset = 1
     for point in projected_points:
       x_center = point[0]
       y_center = point[1]
