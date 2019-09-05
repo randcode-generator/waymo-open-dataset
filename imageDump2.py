@@ -7,13 +7,6 @@ import itertools
 from PIL import Image
 from PIL import ImageDraw
 
-
-def find1(item1, tofind):
-  for i in range(len(item1)):
-    if(item1[i].name == tofind):
-      return item1[i]
-  return None
-
 def filename(index):
   if(index < 10):
     return "00"+str(index)
@@ -193,10 +186,6 @@ for data in dataset:
       fwrite = tf.io.write_file(fname, image.image)
       sess.run(fwrite)
 
-    tmp1 = find1(frame.projected_lidar_labels, image.name).labels
-    if(len(tmp1) == 0):
-      continue
-
     #here
     import matplotlib.pyplot as plt
 
@@ -221,7 +210,6 @@ for data in dataset:
       y_center = point[1]
       color = point[2]
       c = plt.get_cmap('jet')((color % 20.0) / 20.0)
-      #print(c, c[0], c[1])
       left = x_center - offset
       top = y_center - offset
       right = x_center + offset
