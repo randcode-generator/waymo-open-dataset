@@ -163,12 +163,9 @@ for data in dataset:
   cp_points_all_concat = np.concatenate([cp_points_all, points_all], axis=-1)
   cp_points_all_concat_tensor = tf.constant(cp_points_all_concat)
 
-  # The distance between lidar points and vehicle frame origin.
-  points_all_tensor = tf.norm(points_all, axis=-1, keepdims=True)
-  cp_points_all_tensor = tf.constant(cp_points_all, dtype=tf.int32)
-
   i += 1
 
+  #images = sorted(frame.images, key=lambda i:i.name)
   for index, image in enumerate(frame.images):
     name = open_dataset.CameraName.Name.Name(image.name)
     path = "images/" + name
@@ -189,6 +186,10 @@ for data in dataset:
     #here
     import matplotlib.pyplot as plt
 
+    # The distance between lidar points and vehicle frame origin.
+    points_all_tensor = tf.norm(points_all, axis=-1, keepdims=True)
+    cp_points_all_tensor = tf.constant(cp_points_all, dtype=tf.int32)
+    
     mask = tf.equal(cp_points_all_tensor[..., 0], image.name)
 
     cp_points_all_tensor = tf.cast(tf.gather_nd(
