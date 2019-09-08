@@ -177,12 +177,6 @@ for data in dataset:
 
     path = path + "/" + filename(i)+'.jpg'
 
-    with tf.compat.v1.Session() as sess:
-      fname = tf.constant(path)
-      print(path)
-      fwrite = tf.io.write_file(fname, image.image)
-      sess.run(fwrite)
-
     #here
     import matplotlib.pyplot as plt
 
@@ -199,11 +193,8 @@ for data in dataset:
     projected_points = tf.concat(
       [cp_points_all_tensor[..., 1:3], points_all_tensor], axis=-1).numpy()
 
-    name = open_dataset.CameraName.Name.Name(image.name)
-    path = "images/" + name
-    path = path + "/" + filename(i)+'.jpg'
-
-    image = Image.open(path).convert('RGB')
+    from io import BytesIO
+    image = Image.open(BytesIO(image.image))
     draw = ImageDraw.Draw(image)
     offset = 1
     for point in projected_points:
