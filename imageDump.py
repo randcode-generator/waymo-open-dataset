@@ -10,7 +10,6 @@ from PIL import ImageDraw
 
 def find1(item1, tofind):
   for i in range(len(item1)):
-    print(item1[i].name, tofind)
     if(item1[i].name == tofind):
       return item1[i]
   return None
@@ -46,40 +45,36 @@ for data in dataset:
   frame = open_dataset.Frame()
   frame.ParseFromString(bytearray(data.numpy()))
   i += 1
-  with tf.compat.v1.Session() as sess:
-      for index, image in enumerate(frame.images):
-        name = open_dataset.CameraName.Name.Name(image.name)
-        path = "images/" + name
-        if(os.path.exists(path) == False):
-          try:
-            os.mkdir(path, 0o755)
-          except OSError:
-            print ("Creation of the directory %s failed" % path)
+  for index, image in enumerate(frame.images):
+    name = open_dataset.CameraName.Name.Name(image.name)
+    path = "images/" + name
+    if(os.path.exists(path) == False):
+      try:
+        os.mkdir(path, 0o755)
+      except OSError:
+        print ("Creation of the directory %s failed" % path)
 
-        path = path + "/" + filename(i)+'.jpg'
-        fname = tf.constant(path)
-        print(path)
-        fwrite = tf.io.write_file(fname, image.image)
-        sess.run(fwrite)
+    path = path + "/" + filename(i)+'.jpg'
 
-        tmp1 = find1(frame.projected_lidar_labels, image.name).labels
-        if(len(tmp1) == 0):
-          continue
-      
-        image = Image.open(path).convert('RGB')
-        draw = ImageDraw.Draw(image)
-        for index1 in range(len(tmp1)):
-          tmp = tmp1[index1].box
+    tmp1 = find1(frame.projected_lidar_labels, image.name).labels
+    if(len(tmp1) == 0):
+      continue
+  
+    from io import BytesIO
+    image = Image.open(BytesIO(image.image))
+    draw = ImageDraw.Draw(image)
+    for index1 in range(len(tmp1)):
+      tmp = tmp1[index1].box
 
-          center_x = tmp.center_x
-          center_y = tmp.center_y
-          width = tmp.width
-          length = tmp.length
+      center_x = tmp.center_x
+      center_y = tmp.center_y
+      width = tmp.width
+      length = tmp.length
 
-          left = center_x - (length/2)
-          top = center_y - (width/2)
-          right = center_x + (length/2)
-          bottom = center_y + (width/2)
-          draw.line([(left, top), (left, bottom), (right, bottom), (right, top), (left, top)], width=4, fill='red')
-        
-        image.save(path, format='JPEG')
+      left = center_x - (length/2)
+      top = center_y - (width/2)
+      right = center_x + (length/2)
+      bottom = center_y + (width/2)
+      draw.line([(left, top), (left, bottom), (right, bottom), (right, top), (left, top)], width=4, fill='red')
+    
+    image.save(path, format='JPEG')
