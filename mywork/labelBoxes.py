@@ -6,7 +6,7 @@ import numpy as np
 import itertools
 from PIL import Image
 from PIL import ImageDraw
-
+from PIL import ImageFont
 
 def find1(item1, tofind):
   for i in range(len(item1)):
@@ -29,6 +29,7 @@ imp.load_module('waymo_open_dataset', m[0], m[1], m[2])
 from waymo_open_dataset.utils import range_image_utils
 from waymo_open_dataset.utils import transform_utils
 from waymo_open_dataset import dataset_pb2 as open_dataset
+from waymo_open_dataset import label_pb2 as label_dataset
 
 tf.enable_eager_execution()
 
@@ -47,6 +48,7 @@ for data in dataset:
   i += 1
   for index, image in enumerate(frame.images):
     name = open_dataset.CameraName.Name.Name(image.name)
+
     path = "images/" + name
     if(os.path.exists(path) == False):
       try:
@@ -75,6 +77,9 @@ for data in dataset:
       top = center_y - (width/2)
       right = center_x + (length/2)
       bottom = center_y + (width/2)
+
+      typeText = label_dataset.Label.Type.Name(tmp1[index1].type)
+      draw.text((left, top-20), typeText, font = ImageFont.truetype("/usr/share/fonts/truetype/ubuntu/UbuntuMono-B.ttf", size=20))
       draw.line([(left, top), (left, bottom), (right, bottom), (right, top), (left, top)], width=4, fill='red')
     
     image.save(path, format='JPEG')
