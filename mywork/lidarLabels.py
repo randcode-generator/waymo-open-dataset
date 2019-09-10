@@ -146,26 +146,15 @@ for data in dataset:
       range_images,
       camera_projections,
       range_image_top_pose)
-  points_ri2, cp_points_ri2 = convert_range_image_to_point_cloud(
-      frame,
-      range_images,
-      camera_projections,
-      range_image_top_pose,
-      ri_index=1)
+  
   # 3d points in vehicle frame.
   points_all = np.concatenate(points, axis=0)
-  points_all_ri2 = np.concatenate(points_ri2, axis=0)
   
   # camera projection corresponding to each point.
   cp_points_all = np.concatenate(cp_points, axis=0)
-  cp_points_all_ri2 = np.concatenate(cp_points_ri2, axis=0)
-
-  cp_points_all_concat = np.concatenate([cp_points_all, points_all], axis=-1)
-  cp_points_all_concat_tensor = tf.constant(cp_points_all_concat)
 
   i += 1
 
-  #images = sorted(frame.images, key=lambda i:i.name)
   for index, image in enumerate(frame.images):
     name = open_dataset.CameraName.Name.Name(image.name)
     path = "images/" + name
